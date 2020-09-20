@@ -45,7 +45,7 @@ void CountdownLabel::paintEvent(QPaintEvent *event)
     QPainter p(this);
 
     const int timeLeftSecs = m_curSecLeft;
-    const int timeLeftMins = timeLeftSecs / 60 / 60;
+    const int timeLeftMins = timeLeftSecs / 60;
     const auto str = QString("%1:%2").arg(timeLeftMins, 2, 10, QChar('0')).arg((int)(timeLeftSecs % 60), 2, 10, QChar('0'));
 //    qDebug() << timeLeftSecs << " is running " << isRunning();
 
