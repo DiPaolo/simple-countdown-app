@@ -37,7 +37,7 @@ if(ANDROID)
     main_window.ui
   )
 else()
-  add_executable(simple-countdown-app
+  add_executable(simple-countdown-app MACOSX_BUNDLE
     countdown_label.cpp
     countdown_label.h
     countdown_label.ui
@@ -50,3 +50,15 @@ else()
 endif()
 
 target_link_libraries(simple-countdown-app PRIVATE Qt5::Widgets Qt5::Multimedia)
+
+set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    BUNDLE TRUE
+    OUTPUT_NAME SimpleCountdown
+)
+
+install(TARGETS ${PROJECT_NAME}
+    BUNDLE DESTINATION .
+)
