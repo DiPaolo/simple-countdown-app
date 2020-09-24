@@ -12,6 +12,8 @@ CountdownLabel::CountdownLabel(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_timeAlmostOutSound.setSource(QUrl::fromLocalFile(":/sounds/ticktock.wav"));
+    m_timeAlmostOutSound.setLoopCount(QSoundEffect::Infinite);
     m_timeoutSound.setSource(QUrl::fromLocalFile(":/sounds/alarm-clock-01.wav"));
 
     connect(&m_updateTimer, &QTimer::timeout, [this]() {
@@ -21,12 +23,16 @@ CountdownLabel::CountdownLabel(QWidget *parent) :
             m_curColor = Qt::red;
 
         if (isRunning() && m_curSecLeft <= 10)
-            QApplication::beep();
+        {
+            if (!m_timeAlmostOutSound.isPlaying())
+                m_timeAlmostOutSound.play();
+        }
 
         update();
 
         if (isRunning() && m_curSecLeft <= 0)
         {
+            m_timeAlmostOutSound.stop();
             m_timeoutSound.play();
             m_updateTimer.stop();
         }
@@ -87,7 +93,10 @@ void CountdownLabel::start(const QTime &time)
 void CountdownLabel::stop(bool canceled)
 {
     if (canceled)
+    {
+        m_timeAlmostOutSound.stop();
         m_timeoutSound.stop();
+    }
 
     m_updateTimer.stop();
     m_timer = QTime();

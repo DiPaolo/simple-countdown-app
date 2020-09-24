@@ -36,6 +36,7 @@ private:
 
     QTime m_timer;
     QTimer m_updateTimer;
+    QSoundEffect m_timeAlmostOutSound;
     QSoundEffect m_timeoutSound;
 
     int m_requiredMsec = 0;

@@ -23,19 +23,14 @@ Widget::Widget(QWidget *parent)
         if (ui->countdown->isRunning())
             ui->countdown->stop();
         else
-        {
-//            m_timeoutSound.stop();
             ui->countdown->start({ 0, ui->minSpinBox->value(), ui->secSpinBox->value() });
-        }
     });
 
     connect(ui->countdown, &CountdownLabel::started, [this]() {
         updateControls(true);
     });
 
-    connect(ui->countdown, &CountdownLabel::finished, [this](bool canceled) {
-//        if (!canceled)
-//            m_timeoutSound.play();
+    connect(ui->countdown, &CountdownLabel::finished, [this]() {
         updateControls(false);
     });
 }
@@ -47,8 +42,6 @@ Widget::~Widget()
 
 void Widget::updateControls(bool isRunning)
 {
-    qDebug() << "updateControls isRunning=" << isRunning;
-
     ui->minSpinBox->setEnabled(!isRunning);
     ui->secSpinBox->setEnabled(!isRunning);
 
