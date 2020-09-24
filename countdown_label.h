@@ -2,6 +2,7 @@
 #define COUNTDOWN_LABEL_H
 
 #include <QLabel>
+#include <QSoundEffect>
 #include <QTime>
 #include <QTimer>
 
@@ -35,6 +36,7 @@ private:
 
     QTime m_timer;
     QTimer m_updateTimer;
+    QSoundEffect m_timeoutSound;
 
     int m_requiredMsec = 0;
     int m_curSecLeft = 0;

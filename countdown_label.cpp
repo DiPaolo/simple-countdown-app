@@ -12,6 +12,8 @@ CountdownLabel::CountdownLabel(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_timeoutSound.setSource(QUrl::fromLocalFile(":/sounds/alarm-clock-01.wav"));
+
     connect(&m_updateTimer, &QTimer::timeout, [this]() {
         m_curSecLeft = std::max(m_requiredMsec - m_timer.elapsed(), 0) / 1000;
 
@@ -24,7 +26,15 @@ CountdownLabel::CountdownLabel(QWidget *parent) :
         update();
 
         if (isRunning() && m_curSecLeft <= 0)
-            stop(false);
+        {
+            m_timeoutSound.play();
+            m_updateTimer.stop();
+        }
+    });
+
+    connect(&m_timeoutSound, &QSoundEffect::playingChanged, [this]() {
+        if (!m_timeoutSound.isPlaying())
+            emit stop(false);
     });
 
     update();
@@ -37,7 +47,7 @@ CountdownLabel::~CountdownLabel()
 
 bool CountdownLabel::isRunning() const
 {
-    return (m_requiredMsec > m_timer.elapsed());
+    return (m_requiredMsec != 0);
 }
 
 void CountdownLabel::paintEvent(QPaintEvent *event)
@@ -53,11 +63,8 @@ void CountdownLabel::paintEvent(QPaintEvent *event)
 
     p.setPen(m_curColor);
     QFontMetrics fm(p.font());
-//    const double scaleFactor = fm.horizontalAdvance("0") / (double)fm.height();
     qreal sx = (double)r.width() / fm.horizontalAdvance(str);
     qreal sy = (double)r.height() / fm.height();
-//    qreal sy = sx / scaleFactor;
-//    p.save();
     p.translate(r.center());
     p.scale(sx, sy);
     p.translate(-r.center());
@@ -67,6 +74,7 @@ void CountdownLabel::paintEvent(QPaintEvent *event)
 
 void CountdownLabel::start(const QTime &time)
 {
+    m_timeoutSound.stop();
     m_curColor = Qt::black;
 
     m_requiredMsec = (time.minute() * 60 + time.second()) * 1000;
@@ -78,6 +86,9 @@ void CountdownLabel::start(const QTime &time)
 
 void CountdownLabel::stop(bool canceled)
 {
+    if (canceled)
+        m_timeoutSound.stop();
+
     m_updateTimer.stop();
     m_timer = QTime();
     m_requiredMsec = 0;

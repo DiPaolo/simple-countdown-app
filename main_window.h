@@ -22,6 +22,5 @@ private:
 private:
     Ui::Widget *ui;
 
-    QSound m_timeoutSound;
 };
 #endif // WIDGET_H

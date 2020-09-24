@@ -6,7 +6,6 @@
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
-    , m_timeoutSound(":/sounds/alarm-clock-01.wav", this)
 {
     ui->setupUi(this);
 
@@ -25,7 +24,7 @@ Widget::Widget(QWidget *parent)
             ui->countdown->stop();
         else
         {
-            m_timeoutSound.stop();
+//            m_timeoutSound.stop();
             ui->countdown->start({ 0, ui->minSpinBox->value(), ui->secSpinBox->value() });
         }
     });
@@ -35,8 +34,8 @@ Widget::Widget(QWidget *parent)
     });
 
     connect(ui->countdown, &CountdownLabel::finished, [this](bool canceled) {
-        if (!canceled)
-            m_timeoutSound.play();
+//        if (!canceled)
+//            m_timeoutSound.play();
         updateControls(false);
     });
 }
@@ -48,6 +47,8 @@ Widget::~Widget()
 
 void Widget::updateControls(bool isRunning)
 {
+    qDebug() << "updateControls isRunning=" << isRunning;
+
     ui->minSpinBox->setEnabled(!isRunning);
     ui->secSpinBox->setEnabled(!isRunning);
 
