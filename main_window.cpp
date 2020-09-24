@@ -12,6 +12,14 @@ Widget::Widget(QWidget *parent)
 
     setWindowTitle("Simple Countdown");
 
+    connect(ui->alwaysOnTop, &QCheckBox::stateChanged, [this](int state) {
+        setWindowFlag(Qt::WindowStaysOnTopHint, state == Qt::Checked);
+        show();
+    });
+
+    ui->alwaysOnTop->click();
+    ui->alwaysOnTop->click();
+
     connect(ui->startStop, &QPushButton::clicked, [this]() {
         if (ui->countdown->isRunning())
             ui->countdown->stop();
