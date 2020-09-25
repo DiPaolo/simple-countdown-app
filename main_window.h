@@ -22,5 +22,7 @@ private:
 private:
     Ui::Widget *ui;
 
+    const int m_maxMins = 59;
+    const int m_maxSecs = 59;
 };
 #endif // WIDGET_H
