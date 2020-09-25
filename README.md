@@ -1,1 +1,3 @@
 # Simple-Countdown-App
+
+## Screenshot
