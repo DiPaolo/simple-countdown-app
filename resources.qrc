@@ -2,5 +2,6 @@
     <qresource prefix="/sounds">
         <file>alarm-clock-01.wav</file>
         <file>ticktock.wav</file>
+        <file>on_finished.wav</file>
     </qresource>
 </RCC>

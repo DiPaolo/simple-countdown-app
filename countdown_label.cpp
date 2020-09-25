@@ -12,9 +12,9 @@ CountdownLabel::CountdownLabel(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_timeAlmostOutSound.setSource(QUrl::fromLocalFile(":/sounds/ticktock.wav"));
+//    m_timeAlmostOutSound.setSource(QUrl::fromLocalFile(":/sounds/ticktock.wav"));
     m_timeAlmostOutSound.setLoopCount(QSoundEffect::Infinite);
-    m_timeoutSound.setSource(QUrl::fromLocalFile(":/sounds/alarm-clock-01.wav"));
+    m_timeoutSound.setSource(QUrl::fromLocalFile(":/sounds/on_finished.wav"));
 
     connect(&m_updateTimer, &QTimer::timeout, [this]() {
         m_curSecLeft = std::max(m_requiredMsec - m_timer.elapsed(), 0) / 1000;
