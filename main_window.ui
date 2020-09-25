@@ -193,6 +193,12 @@
    <header>countdown_label.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>alwaysOnTop</tabstop>
+  <tabstop>mins</tabstop>
+  <tabstop>secs</tabstop>
+  <tabstop>startStop</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

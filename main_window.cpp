@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QIntValidator>
 #include <QMouseEvent>
+#include <QSettings>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -18,10 +19,6 @@ Widget::Widget(QWidget *parent)
         setWindowFlag(Qt::WindowStaysOnTopHint, state == Qt::Checked);
         show();
     });
-
-    // to initialize state of window flags
-    ui->alwaysOnTop->click();
-    ui->alwaysOnTop->click();
 
     ui->mins->setValidator(new QIntValidator(0, m_maxMins, ui->mins));
     ui->secs->setValidator(new QIntValidator(0, m_maxSecs, ui->secs));
@@ -58,6 +55,12 @@ Widget::Widget(QWidget *parent)
     connect(ui->countdown, &CountdownLabel::finished, [this]() {
         updateControls(false);
     });
+
+    QSettings settings;
+    restoreGeometry(settings.value("windowGeometry").toByteArray());
+    ui->alwaysOnTop->setChecked(settings.value("alwaysOnTop").toBool());
+    ui->mins->setText(settings.value("mins").toString());
+    ui->secs->setText(settings.value("secs").toString());
 }
 
 Widget::~Widget()
@@ -82,6 +85,17 @@ void Widget::mouseMoveEvent(QMouseEvent *event)
 void Widget::mouseReleaseEvent(QMouseEvent *event)
 {
     m_lastDragPos = QPoint();
+}
+
+void Widget::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue("windowGeometry", saveGeometry());
+    settings.setValue("alwaysOnTop", ui->alwaysOnTop->isChecked());
+    settings.setValue("mins", ui->mins->text());
+    settings.setValue("secs", ui->secs->text());
+
+    QWidget::closeEvent(event);
 }
 
 void Widget::updateControls(bool isRunning)
