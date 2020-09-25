@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QIntValidator>
+#include <QMouseEvent>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -11,6 +12,7 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
     setWindowTitle("Simple Countdown");
+    setWindowFlag(Qt::FramelessWindowHint, true);
 
     connect(ui->alwaysOnTop, &QCheckBox::stateChanged, [this](int state) {
         setWindowFlag(Qt::WindowStaysOnTopHint, state == Qt::Checked);
@@ -61,6 +63,25 @@ Widget::Widget(QWidget *parent)
 Widget::~Widget()
 {
     delete ui;
+}
+
+void Widget::mousePressEvent(QMouseEvent *event)
+{
+    m_lastDragPos = event->globalPos();
+}
+
+void Widget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_lastDragPos.isNull())
+        return;
+
+    move(pos() + (event->globalPos() - m_lastDragPos));
+    m_lastDragPos = event->globalPos();
+}
+
+void Widget::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_lastDragPos = QPoint();
 }
 
 void Widget::updateControls(bool isRunning)
